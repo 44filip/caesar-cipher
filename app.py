@@ -18,12 +18,16 @@ def set_key():
     filename = "key_file.txt"
     data_to_write = None
         
-    while isinstance(data_to_write, int) is False or not (1 <= data_to_write <= 25):
+    while True:
         try:
             data_to_write = int(input("Enter a key (1-25) for your Caesar cipher: "))
+            if 1 <= data_to_write <= 25:
+                break
+            else:
+                print("Invalid input. Please enter an integer between 1 and 25.")
         except ValueError:
-            print("Invalid input. Please enter an integer.")
-        
+            print("Invalid input. Please enter a numerical value.")
+
     with open(filename, "w") as f:
            f.write(str(data_to_write))
         
