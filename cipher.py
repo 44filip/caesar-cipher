@@ -1,6 +1,6 @@
 def main():
     while True:
-        choice = input("1. Set the key\n2. Encrypt a message\n3. Decrypt a message\n4. Exit\n\nEnter your choice: ")
+        choice = input("1. Set the key\n2. Encrypt a message\n3. Decrypt a message\n4. Brute Force\n5. Exit\n\nEnter your choice: ")
         match choice:
             case "1":
                 set_key()
@@ -9,6 +9,8 @@ def main():
             case "3":
                 decrypt_message()
             case "4":
+                brute_force()
+            case "5":
                 print("Exiting the program...")
                 break
             case _:
@@ -77,6 +79,30 @@ def decrypt_message():
         else:
             answer += ch
     return print(f"'{message}' decrypted with the key {key} is '{answer}'\n")
+
+def brute_force():
+    message = input("Enter the message you want to brute force: ")
+    letters="abcdefghijklmnopqrstuvwxyz"
+    
+    for key in range(1, 26):
+        answer = ""
+        for ch in message:
+            if ch.isupper():
+                if ch.lower() in letters:
+                    position = letters.find(ch.lower())
+                    new_pos = (position - key) % 26
+                    new_char = letters[new_pos]
+                    answer += new_char.upper()
+            elif ch.islower():
+                if ch in letters:
+                    position = letters.find(ch)
+                    new_pos = (position - key) % 26
+                    new_char = letters[new_pos]
+                    answer += new_char
+            else:
+                answer += ch
+        print(f"'{message}' decrypted with the key {key} is '{answer}'")
+    print("Brute force complete.\n")
     
 def read_key():
     try:
