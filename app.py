@@ -32,14 +32,7 @@ def set_key():
 def encrypt_message():
     message = input("Enter the message you want to encrypt: ")
     answer = ""
-    key = None
-    try:
-        with open("key_file.txt", "r") as f:
-            key_str = f.read()
-            key = int(key_str)
-    except FileNotFoundError:
-        print("Error: Key file not found. Please set the key first.")
-        return None
+    key = read_key()
     
     for i in range(len(message)):
         ch = message[i]
@@ -58,7 +51,38 @@ def encrypt_message():
     
 
 def decrypt_message():
-    print()
+    message = input("Enter the message you want to decrypt: ")
+    answer = ""
+    letters="abcdefghijklmnopqrstuvwxyz"
+    key = read_key()
+
+    for ch in message:
+
+        if ch.isupper():
+            if ch.lower() in letters:
+                position = letters.find(ch.lower())
+                new_pos = (position - key) % 26
+                new_char = letters[new_pos]
+                answer += new_char.upper()
+        elif ch.islower():
+            if ch in letters:
+                position = letters.find(ch)
+                new_pos = (position - key) % 26
+                new_char = letters[new_pos]
+                answer += new_char
+        else:
+            answer += ch
+    return print(f"'{message}' decrypted with the key {key} is '{answer}'\n")
+    
+def read_key():
+    try:
+        with open("key_file.txt", "r") as f:
+            key_str = f.read()
+            key = int(key_str)
+    except FileNotFoundError:
+        print("Error: Key file not found. Please set the key first.")
+        return None
+    return key
 
 if __name__ == "__main__":
     main()
