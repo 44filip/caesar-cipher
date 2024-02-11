@@ -5,9 +5,9 @@ def main():
             case "1":
                 set_key()
             case "2":
-                print()
+                encrypt_message()
             case "3":
-                print()
+                decrypt_message()
             case "4":
                 print("Exiting the program...")
                 break
@@ -27,7 +27,38 @@ def set_key():
     with open(filename, "w") as f:
            f.write(str(data_to_write))
         
-    print(f"File {filename} created successfully.\n")
+    print(f"{filename} set successfully.\n")
         
+def encrypt_message():
+    message = input("Enter the message you want to encrypt: ")
+    answer = ""
+    key = None
+    try:
+        with open("key_file.txt", "r") as f:
+            key_str = f.read()
+            key = int(key_str)
+    except FileNotFoundError:
+        print("Error: Key file not found. Please set the key first.")
+        return None
+    
+    for i in range(len(message)):
+        ch = message[i]
+        if ch==" ":
+            answer+=" "
+        elif (ch.isupper()):
+            answer += chr((ord(ch) + key-65) % 26 + 65)
+        
+        elif (ch.islower()):
+            answer += chr((ord(ch) + key-97) % 26 + 97)
+        
+        else:
+            answer += ch
+    
+    return print(f"'{message}' encrypted with the key {key} is '{answer}'\n")
+    
+
+def decrypt_message():
+    print()
+
 if __name__ == "__main__":
     main()
