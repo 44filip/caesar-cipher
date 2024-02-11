@@ -34,9 +34,9 @@ def set_key():
     print(f"{filename} set successfully.\n")
         
 def encrypt_message():
+    key = read_key()
     message = input("Enter the message you want to encrypt: ")
     answer = ""
-    key = read_key()
     
     for i in range(len(message)):
         ch = message[i]
@@ -55,10 +55,10 @@ def encrypt_message():
     
 
 def decrypt_message():
+    key = read_key()
     message = input("Enter the message you want to decrypt: ")
     answer = ""
     letters="abcdefghijklmnopqrstuvwxyz"
-    key = read_key()
 
     for ch in message:
 
