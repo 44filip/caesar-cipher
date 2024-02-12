@@ -1,9 +1,12 @@
+import hashlib
+salt = b'mLy$zxVbn37hyG43875'
+
 def main():
     while True:
         choice = input("1. Set the key\n2. Encrypt a message\n3. Decrypt a message\n4. Brute Force\n5. Exit\n\nEnter your choice: ")
         match choice:
             case "1":
-                set_key()
+                hash_key()
             case "2":
                 encrypt_message()
             case "3":
@@ -16,9 +19,8 @@ def main():
             case _:
                 print("Invalid choice.\n")
         
-def set_key():
-    filename = "key_file.txt"
-    data_to_write = None
+def hash_key():
+    filename = "hashed_key.txt"
         
     while True:
         try:
@@ -30,13 +32,31 @@ def set_key():
         except ValueError:
             print("Invalid input. Please enter a numerical value.")
 
+    hashed_key = hashlib.sha256(str(data_to_write).encode('utf-8') + salt).hexdigest()
+    
     with open(filename, "w") as f:
-           f.write(str(data_to_write))
+           f.write(hashed_key)
         
     print(f"{filename} set successfully.\n")
+
+def dehash_key():
+    try:
+        with open("hashed_key.txt", "r") as f:
+            hashed_key_str = f.read()
+            hashed_key = bytes.fromhex(hashed_key_str)
+            
+            key_candidate = 1
+            while True:
+                hashed_candidate = hashlib.sha256(str(key_candidate).encode('utf-8') + salt).hexdigest()
+                if bytes.fromhex(hashed_candidate) == hashed_key:
+                    return key_candidate
+                key_candidate += 1
+    except FileNotFoundError:
+        print("Error: Key file not found. Please set the key first.")
+        return None
         
 def encrypt_message():
-    key = read_key()
+    key = dehash_key()
     message = input("Enter the message you want to encrypt: ")
     answer = ""
     
@@ -53,11 +73,10 @@ def encrypt_message():
         else:
             answer += ch
     
-    return print(f"'{message}' encrypted with the key {key} is '{answer}'\n")
-    
+    return print(f"'{message}' encrypted with the selected key is '{answer}'\n")
 
 def decrypt_message():
-    key = read_key()
+    key = dehash_key()
     message = input("Enter the message you want to decrypt: ")
     answer = ""
     letters="abcdefghijklmnopqrstuvwxyz"
@@ -78,7 +97,7 @@ def decrypt_message():
                 answer += new_char
         else:
             answer += ch
-    return print(f"'{message}' decrypted with the key {key} is '{answer}'\n")
+    return print(f"'{message}' decrypted with the selected key is '{answer}'\n")
 
 def brute_force():
     message = input("Enter the message you want to brute force: ")
@@ -103,16 +122,6 @@ def brute_force():
                 answer += ch
         print(f"'{message}' decrypted with the key {key} is '{answer}'")
     print("Brute force complete.\n")
-    
-def read_key():
-    try:
-        with open("key_file.txt", "r") as f:
-            key_str = f.read()
-            key = int(key_str)
-    except FileNotFoundError:
-        print("Error: Key file not found. Please set the key first.")
-        return None
-    return key
 
 if __name__ == "__main__":
     main()
