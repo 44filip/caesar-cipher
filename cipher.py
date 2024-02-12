@@ -3,7 +3,7 @@ salt = b'mLy$zxVbn37hyG43875'
 
 def main():
     while True:
-        choice = input("1. Set the key\n2. Encrypt a message\n3. Decrypt a message\n4. Brute Force\n5. Exit\n\nEnter your choice: ")
+        choice = input("1. Set the key to hash\n2. Encrypt a message\n3. Decrypt a message\n4. Brute force\n5. Exit\n\nEnter your choice: ")
         match choice:
             case "1":
                 hash_key()
