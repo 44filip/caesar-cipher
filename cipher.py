@@ -53,7 +53,7 @@ def dehash_key():
                 key_candidate += 1
     except FileNotFoundError:
         print("Key file not found. Please set the key first.\n")
-        return None
+        return False
         
 def encrypt_message():
     key = dehash_key()
