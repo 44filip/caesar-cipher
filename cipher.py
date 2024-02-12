@@ -52,52 +52,56 @@ def dehash_key():
                     return key_candidate
                 key_candidate += 1
     except FileNotFoundError:
-        print("Error: Key file not found. Please set the key first.")
+        print("Key file not found. Please set the key first.\n")
         return None
         
 def encrypt_message():
     key = dehash_key()
-    message = input("Enter the message you want to encrypt: ")
-    answer = ""
-    
-    for i in range(len(message)):
-        ch = message[i]
-        if ch==" ":
-            answer+=" "
-        elif (ch.isupper()):
-            answer += chr((ord(ch) + key-65) % 26 + 65)
+    if key:
+        message = input("Enter the message you want to encrypt: ")
+        answer = ""
         
-        elif (ch.islower()):
-            answer += chr((ord(ch) + key-97) % 26 + 97)
+        for i in range(len(message)):
+            ch = message[i]
+            if ch==" ":
+                answer+=" "
+            elif (ch.isupper()):
+                answer += chr((ord(ch) + key-65) % 26 + 65)
+            
+            elif (ch.islower()):
+                answer += chr((ord(ch) + key-97) % 26 + 97)
+            
+            else:
+                answer += ch
         
-        else:
-            answer += ch
-    
-    return print(f"'{message}' encrypted with the selected key is '{answer}'\n")
+        return print(f"'{message}' encrypted with the selected key is '{answer}'\n")
+    else: return
 
 def decrypt_message():
     key = dehash_key()
-    message = input("Enter the message you want to decrypt: ")
-    answer = ""
-    letters="abcdefghijklmnopqrstuvwxyz"
+    if key:
+        message = input("Enter the message you want to decrypt: ")
+        answer = ""
+        letters="abcdefghijklmnopqrstuvwxyz"
 
-    for ch in message:
+        for ch in message:
 
-        if ch.isupper():
-            if ch.lower() in letters:
-                position = letters.find(ch.lower())
-                new_pos = (position - key) % 26
-                new_char = letters[new_pos]
-                answer += new_char.upper()
-        elif ch.islower():
-            if ch in letters:
-                position = letters.find(ch)
-                new_pos = (position - key) % 26
-                new_char = letters[new_pos]
-                answer += new_char
-        else:
-            answer += ch
-    return print(f"'{message}' decrypted with the selected key is '{answer}'\n")
+            if ch.isupper():
+                if ch.lower() in letters:
+                    position = letters.find(ch.lower())
+                    new_pos = (position - key) % 26
+                    new_char = letters[new_pos]
+                    answer += new_char.upper()
+            elif ch.islower():
+                if ch in letters:
+                    position = letters.find(ch)
+                    new_pos = (position - key) % 26
+                    new_char = letters[new_pos]
+                    answer += new_char
+            else:
+                answer += ch
+        return print(f"'{message}' decrypted with the selected key is '{answer}'\n")
+    else: return
 
 def brute_force():
     message = input("Enter the message you want to brute force: ")
